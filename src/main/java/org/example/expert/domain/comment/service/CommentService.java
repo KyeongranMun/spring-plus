@@ -29,8 +29,8 @@ public class CommentService {
     @Transactional
     public CommentSaveResponse saveComment(AuthUser authUser, long todoId, CommentSaveRequest commentSaveRequest) {
         User user = User.fromAuthUser(authUser);
-        Todo todo = todoRepository.findById(todoId).orElseThrow(() ->
-                new InvalidRequestException("Todo not found"));
+        Todo todo = todoRepository.findById(todoId)
+                .orElseThrow(() -> new InvalidRequestException("일정을 찾을 수 없습니다."));
 
         Comment newComment = new Comment(
                 commentSaveRequest.getContents(),
@@ -43,7 +43,7 @@ public class CommentService {
         return new CommentSaveResponse(
                 savedComment.getId(),
                 savedComment.getContents(),
-                new UserResponse(user.getId(), user.getEmail())
+                new UserResponse(user.getId(), user.getNickname(), user.getEmail())
         );
     }
 
@@ -56,7 +56,7 @@ public class CommentService {
             CommentResponse dto = new CommentResponse(
                     comment.getId(),
                     comment.getContents(),
-                    new UserResponse(user.getId(), user.getEmail())
+                    new UserResponse(user.getId(), user.getNickname(), user.getEmail())
             );
             dtoList.add(dto);
         }

@@ -19,8 +19,9 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     public UserResponse getUser(long userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new InvalidRequestException("User not found"));
-        return new UserResponse(user.getId(), user.getEmail());
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new InvalidRequestException("유저를 찾을 수 없습니다."));
+        return new UserResponse(user.getId(), user.getEmail(), user.getNickname());
     }
 
     @Transactional
@@ -28,7 +29,7 @@ public class UserService {
         validateNewPassword(userChangePasswordRequest);
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new InvalidRequestException("User not found"));
+                .orElseThrow(() -> new InvalidRequestException("유저를 찾을 수 없습니다."));
 
         if (passwordEncoder.matches(userChangePasswordRequest.getNewPassword(), user.getPassword())) {
             throw new InvalidRequestException("새 비밀번호는 기존 비밀번호와 같을 수 없습니다.");
