@@ -74,4 +74,6 @@ class TodoControllerTest {
                 .andExpect(jsonPath("$.code").value(HttpStatus.BAD_REQUEST.value()))
                 .andExpect(jsonPath("$.message").value("일정을 찾을 수 없습니다."));
     }
+
+
 }
